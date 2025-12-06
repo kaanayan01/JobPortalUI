@@ -6,13 +6,17 @@ import com.jobportal.exception.UnauthorizedException;
 import com.jobportal.model.Employer;
 import com.jobportal.model.JobPost;
 import com.jobportal.model.enums.ApprovalStatus;
+import com.jobportal.model.enums.SubscriptionType;
 import com.jobportal.repository.JobPostRepository;
+import com.jobportal.repository.SavedJobRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+
+import javax.naming.LimitExceededException;
 
 @Service
 public class JobPostService {
@@ -23,6 +27,8 @@ public class JobPostService {
 	@Autowired
 	private EmployerService employerService;
 	
+	@Autowired
+	private SavedJobRepository savedJobRepository;
 
 	 private JobPost getJobPostOrThrow(int id) {
 	        JobPost job = repository.findById(id);
@@ -32,10 +38,17 @@ public class JobPostService {
 	        return job;
 	    }
 
-	    public JobPost create(JobPost jobPost) {
+	    public JobPost create(JobPost jobPost) throws LimitExceededException {
 	    	Employer employer = employerService.findById(jobPost.getEmployerId());
+	    	
 	    	if(!ApprovalStatus.APPROVED.equals(employer.getApprovalStatus())) {
 	    		throw new UnauthorizedException("You are not allowed to perform this action until approval status is confirmed");
+	    	}
+	    	if(employer.getSubscriptionType() == SubscriptionType.FREE) {
+	    		int jobPostsCount = repository.countJobsPostedTodayByEmployer(jobPost.getEmployerId());
+	    		if(jobPostsCount >= 5) {
+	    			throw new LimitExceededException("Limit exhausted for the day. Please upgrade to continue posting jobs");
+	    		}
 	    	}
 	        int id = repository.create(jobPost);   // insert → returns generated ID
 	        return getJobPostOrThrow(id);
@@ -67,8 +80,10 @@ public class JobPostService {
 	        return getJobPostOrThrow(jobPost.getJobId());
 	    }
 
-	public int softDelete(int id) {
-		return repository.softDelete(id);
+	public int softDelete(int jobId) {
+		
+		savedJobRepository.deleteAllByJobId(jobId);
+		return repository.softDelete(jobId);
 	}
 
 	public List<JobPost> findAllActive() {

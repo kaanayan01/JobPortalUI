@@ -4,12 +4,14 @@ import com.jobportal.exception.BadRequestException;
 import com.jobportal.exception.ResourceNotFoundException;
 import com.jobportal.model.Employer;
 import com.jobportal.model.User;
+import com.jobportal.model.enums.PaymentStatus;
 import com.jobportal.model.enums.UserType;
 import com.jobportal.repository.EmployerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -63,5 +65,10 @@ public class EmployerService {
 
 	public List<Employer> findAllPending() {
 		return repository.findAllPending();
+	}
+
+	public void updateSubscriptionType( int userId, LocalDateTime expiry, int paymentId) {
+		repository.updateSubscriptionType(userId,expiry, paymentId );
+		
 	}
 }

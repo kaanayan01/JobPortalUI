@@ -2,8 +2,11 @@ package com.jobportal.controller;
 
 import com.jobportal.dto.GenericResponse;
 import com.jobportal.model.Subscription;
+import com.jobportal.model.enums.UserType;
 import com.jobportal.service.SubscriptionService;
 import com.jobportal.utils.ResponseBuilder;
+
+import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +38,12 @@ public class SubscriptionController {
     @GetMapping
     public ResponseEntity<GenericResponse<List<Subscription>>> getAll() {
         List<Subscription> list = service.getAll();
+        return ResponseBuilder.success(list, "All subscriptions retrieved successfully");
+    }
+    
+    @GetMapping("/userType/{userType}")
+    public ResponseEntity<GenericResponse<List<Subscription>>> getAllByUserType(@Valid @PathVariable UserType userType) {
+        List<Subscription> list = service.getAllByUserType(userType);
         return ResponseBuilder.success(list, "All subscriptions retrieved successfully");
     }
 

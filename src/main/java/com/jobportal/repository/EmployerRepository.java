@@ -1,6 +1,8 @@
 package com.jobportal.repository;
 
 import com.jobportal.model.Employer;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EmployerRepository {
@@ -20,4 +22,6 @@ public interface EmployerRepository {
     List<Employer> findAllPending();
 
 	Employer isUserId(int id);
+
+	void updateSubscriptionType(int userId, LocalDateTime expiry, int paymentId);
 }

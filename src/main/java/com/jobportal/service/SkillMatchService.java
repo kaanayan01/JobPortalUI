@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillMatchService {
@@ -76,19 +78,24 @@ public class SkillMatchService {
     
     public double calculateMatchPercentage(List<String> requirements, List<String> seekerSkills) {
  
-        Set<String> setA = new HashSet<>(requirements);
+    	Set<String> setA = requirements.stream()
+    	        .filter(Objects::nonNull)
+    	        .map(s -> s.trim().toLowerCase())
+    	        .collect(Collectors.toSet());
 
-        long matches = seekerSkills.stream()
-                        .filter(setA::contains)
-                        .count();
+    	long matches = seekerSkills.stream()
+    	        .filter(Objects::nonNull)
+    	        .map(s -> s.trim().toLowerCase())
+    	        .filter(setA::contains)
+    	        .count();
 
-        if (seekerSkills.isEmpty()) {
-            return 0.0;
-        }
-        
-        double percentage = (matches * 100.0) / seekerSkills.size();
-        return Math.round(percentage * 100.0) / 100.0;
-        
+    	if (seekerSkills.isEmpty()) {
+    	    return 0.0;
+    	}
+
+    	double percentage = (matches * 100.0) / seekerSkills.size();
+    	return Math.round(percentage * 100.0) / 100.0;
+
     }
 
 	public List<SkillMatch> getAll() {

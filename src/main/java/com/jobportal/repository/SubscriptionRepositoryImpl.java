@@ -1,6 +1,7 @@
 package com.jobportal.repository;
 
 import com.jobportal.model.enums.PlanType;
+import com.jobportal.model.enums.UserType;
 import com.jobportal.model.Subscription;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,6 +29,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
             String plan = rs.getString("plan_type");
             s.setPlanType(plan != null ? PlanType.valueOf(plan) : null);
 
+            s.setUserType(UserType.valueOf(rs.getString("user_type")));
             s.setDuration(rs.getInt("duration"));
             s.setPrice(rs.getBigDecimal("price"));
             return s;
@@ -79,4 +81,10 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
         String sql = "DELETE FROM subscription WHERE subscription_id=?";
         jdbcTemplate.update(sql, subscriptionId);
     }
+
+	@Override
+	public List<Subscription> findAllByUserType(UserType userType) {
+		  String sql = "SELECT * FROM subscription where user_type = '" + userType + "'";
+	        return jdbcTemplate.query(sql, subscriptionMapper);
+	}
 }

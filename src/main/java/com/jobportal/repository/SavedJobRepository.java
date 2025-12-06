@@ -11,4 +11,5 @@ public interface SavedJobRepository {
     List<SavedJob> findByJobId(int jobId);
     void delete(int id);
     boolean existsByJobSeekerIdAndJobId(int jobSeekerId, int jobId);
+	void deleteAllByJobId(int jobId);
 }

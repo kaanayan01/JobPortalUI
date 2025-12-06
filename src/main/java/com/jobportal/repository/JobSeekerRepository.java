@@ -1,6 +1,9 @@
 package com.jobportal.repository;
 
 import com.jobportal.model.JobSeeker;
+import com.jobportal.model.enums.PaymentStatus;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface JobSeekerRepository {
@@ -18,4 +21,6 @@ public interface JobSeekerRepository {
     int softDelete(int id);
     
     void updateResume(int id,String relativePath);
+
+	void updateSubscriptionType( int userId, LocalDateTime expiry, int paymentId);
 }
