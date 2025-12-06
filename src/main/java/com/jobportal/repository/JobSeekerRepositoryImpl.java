@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobportal.exception.ResourceNotFoundException;
 import com.jobportal.model.JobSeeker;
 import com.jobportal.model.User;
+import com.jobportal.model.enums.PaymentStatus;
 import com.jobportal.model.enums.SubscriptionType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -207,5 +209,12 @@ public class JobSeekerRepositoryImpl implements JobSeekerRepository {
 		String sql= "UPDATE job_seeker SET resume_file=? WHERE job_seeker_id=?";
         jdbc.update(sql, relativePath, id);
 
+	}
+
+	@Override
+	public void updateSubscriptionType( int userId, LocalDateTime expiry, int paymentId) {
+		String sql = "UPDATE job_seeker SET subscription_type = 'PREMIUM', premium_expiry = ?, last_payment_id = ?  WHERE user_id=?";
+		jdbc.update(sql, expiry, paymentId, userId);
+		
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -166,5 +167,12 @@ public class EmployerRepositoryImpl implements EmployerRepository {
 	       // throw new ResourceNotFoundException("JobSeeker not found");
 	     return new Employer();
 	    }
+	}
+
+	@Override
+	public void updateSubscriptionType(int userId, LocalDateTime expiry, int paymentId) {
+		String sql = "UPDATE employer SET subscription_type = ?, premium_expiry = ?, last_payment_id = ?  WHERE user_id =?";
+		jdbc.update(sql, "PREMIUM", expiry, paymentId, userId);
+		
 	}
 }

@@ -1,6 +1,7 @@
 package com.jobportal.service;
 
 import com.jobportal.model.Subscription;
+import com.jobportal.model.enums.UserType;
 import com.jobportal.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,4 +36,9 @@ public class SubscriptionService {
     public void delete(int subscriptionId) {
         repository.delete(subscriptionId);
     }
+
+	public List<Subscription> getAllByUserType(UserType userType) {
+		// TODO Auto-generated method stub
+		return repository.findAllByUserType(userType);
+	}
 }

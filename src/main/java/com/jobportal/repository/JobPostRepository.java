@@ -21,4 +21,6 @@ public interface JobPostRepository {
     
     List<JobPost> findByEmployerId(int employerId);
 
+	int countJobsPostedTodayByEmployer(Integer employerId);
+
 }

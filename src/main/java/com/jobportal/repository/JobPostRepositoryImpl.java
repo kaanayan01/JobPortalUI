@@ -21,6 +21,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -135,9 +137,9 @@ public class JobPostRepositoryImpl implements JobPostRepository {
 	@Override
 	public List<JobPost> findAll(int pageSize, int pageNumber, String searchText) {
 	    String sql = "SELECT * FROM job_post WHERE status != 'DELETED' " +
-	                 "AND title LIKE ? ORDER BY job_id LIMIT ? OFFSET ?";
+	                 "AND title LIKE ? ORDER BY job_id desc LIMIT ? OFFSET ?";
 
-	    return jdbc.query(connection -> {
+	    return jdbc.query(connection -> {	
 	        PreparedStatement ps = connection.prepareStatement(sql);
 	        ps.setString(1, "%" + searchText + "%"); // Add wildcards for LIKE
 	        ps.setInt(2, pageSize);
@@ -200,7 +202,7 @@ public class JobPostRepositoryImpl implements JobPostRepository {
 
 	@Override
 	public List<JobPost> findByEmployerId(int employerId) {
-		String sql = "SELECT * FROM job_post WHERE employer_id = ? AND status != 'DELETED'";
+		String sql = "SELECT * FROM job_post WHERE employer_id = ? AND status != 'DELETED' Order by job_id desc";
 		return jdbc.query(sql, rowMapper, employerId);
 	}
 
@@ -209,6 +211,28 @@ public class JobPostRepositoryImpl implements JobPostRepository {
 		String sql = "SELECT count(*) FROM job_post WHERE title like '%" + searchText + "%' AND status != 'DELETED'";
 		
 		return jdbc.queryForObject(sql, Integer.class);
+	}
+
+	@Override
+	public int countJobsPostedTodayByEmployer(Integer employerId) {
+		 LocalDate startDate = LocalDateTime.now().toLocalDate();
+	     LocalDate endDate = startDate.plusDays(1);
+
+	        String sql =
+	            "SELECT COUNT(*) " +
+	            "FROM job_post " +
+	            "WHERE employer_id = ? " +
+	            "AND status != 'DELETED' " +
+	            "AND posted_date >= ? " + 
+	            " AND posted_date < ?" ;
+
+	        return jdbc.queryForObject(
+	            sql,
+	            Integer.class,
+	            employerId,
+	            startDate.atStartOfDay(),   // 00:00:00
+	            endDate.atStartOfDay()      // next day 00:00:00
+	        );
 	}
 
 }

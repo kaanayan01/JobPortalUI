@@ -21,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import javax.naming.LimitExceededException;
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,7 +40,7 @@ class JobPostServiceTest {
 
 	// ========== 1️⃣ CREATE JOB POST ==========
 	@Test
-	void testCreateJobPostSuccess() {
+	void testCreateJobPostSuccess() throws LimitExceededException {
 		JobPost job = new JobPost();
 		job.setEmployerId(5);
 

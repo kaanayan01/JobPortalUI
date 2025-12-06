@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.naming.LimitExceededException;
+
 @RestController
 @RequestMapping("/api/jobs")
 public class JobPostController {
@@ -27,7 +29,7 @@ public class JobPostController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<GenericResponse<JobPost>> create(@Valid @RequestBody JobPost jobPost) {
+    public ResponseEntity<GenericResponse<JobPost>> create(@Valid @RequestBody JobPost jobPost) throws LimitExceededException {
         JobPost created = service.create(jobPost);
         return ResponseBuilder.success(created, "Job post created successfully");
     }

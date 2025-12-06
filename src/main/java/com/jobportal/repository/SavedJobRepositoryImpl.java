@@ -78,4 +78,11 @@ public class SavedJobRepositoryImpl implements SavedJobRepository {
         Integer count = jdbcTemplate.queryForObject(sql, new Object[]{jobSeekerId, jobId}, Integer.class);
         return count != null && count > 0;
     }
+
+	@Override
+	public void deleteAllByJobId(int jobId) {
+		 String sql = "DELETE FROM saved_job WHERE job_id=?";
+	     jdbcTemplate.update(sql, jobId);
+		
+	}
 }

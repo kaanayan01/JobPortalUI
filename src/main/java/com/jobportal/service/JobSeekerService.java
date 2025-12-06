@@ -4,6 +4,7 @@ import com.jobportal.exception.BadRequestException;
 import com.jobportal.exception.ResourceNotFoundException;
 import com.jobportal.model.JobSeeker;
 import com.jobportal.model.User;
+import com.jobportal.model.enums.PaymentStatus;
 import com.jobportal.model.enums.UserType;
 import com.jobportal.repository.JobSeekerRepository;
 
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -76,16 +79,20 @@ public class JobSeekerService {
 	        // prefix e.g. "user_12"
 	        String prefix = "resume" + id;
 
-	        // save inside uploads/users/...
 	        String relativePath = fileStorageService.store(file, "resumes", prefix);
 
 	        // update DB
-	        repository.updateResume(id, relativePath);
+	        repository.updateResume(id, Paths.get(relativePath).getFileName().toString());
 
 	        // fetch updated user and return
 	        JobSeeker updated= repository.findById(id);
 	        		 if(seeker==null) { throw new ResourceNotFoundException("Jobseeker not found with id: " + id);}
 	        return updated;
 	    }
+
+	 public void updateSubscriptionType(int userId, LocalDateTime expiry, int paymentId) {
+		 		repository.updateSubscriptionType(userId, expiry, paymentId);
+		
+	 }
 
 }

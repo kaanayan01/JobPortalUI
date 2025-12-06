@@ -1,5 +1,6 @@
 package com.jobportal.controller;
 
+import com.jobportal.dto.ApplicationDTO;
 import com.jobportal.dto.GenericResponse;
 import com.jobportal.model.Application;
 import com.jobportal.service.ApplicationService;
@@ -8,6 +9,8 @@ import com.jobportal.utils.ResponseBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import javax.naming.LimitExceededException;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -20,7 +23,7 @@ public class ApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity<GenericResponse<Application>> create(@RequestBody Application a) {
+    public ResponseEntity<GenericResponse<Application>> create(@RequestBody Application a) throws LimitExceededException {
         Application created = service.create(a);
         return ResponseBuilder.success(created, "Application created successfully");
     }
@@ -44,8 +47,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/job/{jobId}")
-    public ResponseEntity<GenericResponse<List<Application>>> getByJob(@PathVariable int jobId) {
-        List<Application> apps = service.findByJobId(jobId);
+    public ResponseEntity<GenericResponse<List<ApplicationDTO>>> getByJob(@PathVariable int jobId) {
+        List<ApplicationDTO> apps = service.findByJobId(jobId);
         return ResponseBuilder.success(apps, "Applications for job retrieved successfully");
     }
 
@@ -55,7 +58,7 @@ public class ApplicationController {
         Application updated = service.update(a);
         return ResponseBuilder.success(updated, "Application updated successfully");
     }
-
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<GenericResponse<String>> delete(@PathVariable int id) {
         service.softDelete(id);
