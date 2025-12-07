@@ -99,13 +99,14 @@ public class CompanyProfileRepositoryImpl implements CompanyProfileRepository {
 
 	    jdbcTemplate.update(connection -> {
 	        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-	        ps.setInt(1, profile.getEmployerId());
-	        ps.setString(2, profile.getCompanyName());
-	        ps.setString(3, profile.getIndustry());
-	        ps.setString(4, profile.getAddress());
-	        ps.setString(5, profile.getDescription());
-	        ps.setString(6, profile.getLogo());
-	        ps.setString(7, profile.getWebsite());
+	      
+	        ps.setString(1, profile.getCompanyName());
+	        ps.setString(2, profile.getIndustry());
+	        ps.setString(3, profile.getAddress());
+	        ps.setString(4, profile.getDescription());
+	        ps.setString(5, profile.getLogo());
+	        ps.setString(6, profile.getWebsite());
+	        ps.setInt(7, profile.getProfileId());
 	        return ps;
 	    }, keyHolder);
 
