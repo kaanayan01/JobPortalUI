@@ -1,5 +1,8 @@
 package com.jobportal.repository;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jobportal.model.Admin;
 import com.jobportal.model.Application;
 import com.jobportal.model.Employer;
@@ -13,8 +16,6 @@ import com.jobportal.model.enums.ApprovalStatus;
 import com.jobportal.model.enums.JobStatus;
 import com.jobportal.model.enums.PaymentStatus;
 import com.jobportal.model.enums.UserStatus;
-import java.util.List;
-import java.util.Map;
 
 public interface AdminRepository {
     Admin save(Admin admin);

@@ -1,5 +1,10 @@
 package com.jobportal.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import com.jobportal.model.Admin;
 import com.jobportal.model.Application;
 import com.jobportal.model.Employer;
@@ -14,10 +19,6 @@ import com.jobportal.model.enums.JobStatus;
 import com.jobportal.model.enums.PaymentStatus;
 import com.jobportal.model.enums.UserStatus;
 import com.jobportal.repository.AdminRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class AdminService {

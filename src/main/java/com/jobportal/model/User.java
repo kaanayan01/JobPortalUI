@@ -1,104 +1,120 @@
 package com.jobportal.model;
 
-import jakarta.validation.constraints.Email;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 
 import com.jobportal.model.enums.UserStatus;
 import com.jobportal.model.enums.UserType;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class User {
 
-	private int userId;
+    private int userId;
 
-	@NotBlank(message = "Email is required")
-	@Email(message = "Email must be valid")
-	private String email;
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
+    @Pattern(
+        regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$",
+        message = "Invalid email format"
+    )
+    private String email;
 
-	@NotBlank(message = "Name is required")
-	@Size(min = 2, max = 100, message = "Name must be 2–100 characters")
-	private String name;
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be 2–100 characters")
+    @Pattern(
+        regexp = "^[A-Za-z ]+$",
+        message = "Name can contain only letters and spaces"
+    )
+    private String name;
 
-	@NotBlank(message = "Password is required")
-	@Size(min = 6, message = "Password must be at least 6 characters")
-	private String password;
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    @Pattern(
+        regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*#?&]{6,}$",
+        message = "Password must contain at least one letter and one number"
+    )
+    private String password;
 
-	@NotNull(message = "User type is required")
-	private UserType userType;
+    @NotNull(message = "User type is required")
+    private UserType userType;
 
-	private String profileImage;
+    @Pattern(
+        regexp = "^[^<>:\"/\\\\|?*]+\\.(png|jpg|jpeg)$",
+        message = "Profile image must be a valid image file (png, jpg, jpeg)"
+    )
+    private String profileImage;
 
-	private UserStatus status = UserStatus.PENDING;
+    private UserStatus status = UserStatus.PENDING;
 
-	private LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
-	// ======= GETTERS & SETTERS =======
+    // ======= GETTERS & SETTERS =======
 
-	public int getUserId() {
-		return userId;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public UserType getUserType() {
-		return userType;
-	}
+    public UserType getUserType() {
+        return userType;
+    }
 
-	public void setUserType(UserType userType) {
-		this.userType = userType;
-	}
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
 
-	public String getProfileImage() {
-		return profileImage;
-	}
+    public String getProfileImage() {
+        return profileImage;
+    }
 
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
-	public UserStatus getStatus() {
-		return status;
-	}
+    public UserStatus getStatus() {
+        return status;
+    }
 
-	public void setStatus(UserStatus status) {
-		this.status = status;
-	}
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
